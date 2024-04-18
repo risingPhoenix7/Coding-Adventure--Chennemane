@@ -47,7 +47,7 @@ class Chennemane:
                 self.board[index] = 0
 
             update_board()
-            after(2000, place_bead)  # Schedule next bead placement
+            after(100, place_bead)  # Schedule next bead placement
 
         place_bead()  # Start placing beads
 
@@ -59,7 +59,14 @@ class Chennemane:
         # The game is over if all pits on one side are empty
         player1_side_empty = all(x == 0 for x in self.board[0:7])
         player2_side_empty = all(x == 0 for x in self.board[7:14])
-        return player1_side_empty or player2_side_empty
+        game_over = player1_side_empty or player2_side_empty
+        if game_over:
+            # Collect all remaining beads and add to the respective player's score
+            self.scores[0] += sum(self.board[0:7])
+            self.scores[1] += sum(self.board[7:14])
+            self.board = [0] * 14  # Reset the board
+            return True
+        return False
 
     def get_winner(self):
         # Determine the winner based on scores

@@ -48,7 +48,9 @@ class GameBoard(tk.Tk):
         # Setup initial bead images on the canvas
         self.bead_images = [[] for _ in range(self.cols)]
         self.update_board()
-
+        self.status_label = tk.Label(
+            self, text="Welcome to the Game!", font=('Helvetica', 16))
+        self.status_label.pack()
         self.canvas.bind("<Button-1>", self.make_move_interactive)
 
     def update_board_with_delay(self):
@@ -96,6 +98,7 @@ class GameBoard(tk.Tk):
         return images
 
     def make_move_interactive(self, event):
+        print("Player's turn")
         closest_pit, min_distance = None, float('inf')
         for i in range(self.cols):
             x, y = self.positions[i]
@@ -103,23 +106,35 @@ class GameBoard(tk.Tk):
             if distance < min_distance:
                 min_distance = distance
                 closest_pit = i
+        if self.game.get_possible_moves() == []:
+            self.end_game()
 
         if closest_pit is not None and closest_pit in self.game.get_possible_moves():
             self.canvas.delete("highlight")  # Clear previous highlights
             # Highlight the player's chosen pit
             self.highlight_pit(closest_pit, "blue")
             self.game.make_move(closest_pit, self.update_board_with_delay,
-                                self.after, lambda: self.after(5000, self.process_ai_move))
+                                self.after, self.process_ai_move)
+        else:
+            print("Invalid move")
 
     def process_ai_move(self):
+        print("AI's turn")
+        self.status_label.config(text="AI's turn")
+        # Wait for 2000 milliseconds (2 seconds) before continuing
+        self.canvas.after(2000, self.execute_ai_move)
+
+    def execute_ai_move(self):
         if not self.game.game_over():
             self.canvas.delete("highlight")  # Clear previous highlights
             move = self.ai.compute_move()  # Compute AI's move
             self.highlight_pit(move, "red")  # Highlight the AI's chosen pit
             self.game.make_move(
-                move, self.update_board_with_delay, self.after, lambda: None)
+                move, self.update_board_with_delay, self.after, lambda: self.status_label.config(text="Your turn"))
             if self.game.game_over():
                 self.end_game()
+        else:
+            self.end_game()
 
     def highlight_pit(self, pit, color):
         x, y = self.positions[pit]
@@ -145,3 +160,9 @@ class GameBoard(tk.Tk):
             text="Your Score: " + str(self.game.scores[0]))
         self.score_labels[1].config(
             text="AI Score: " + str(self.game.scores[1]))
+
+    def end_game(self):
+        # Display the winner
+        winner = self.game.get_winner()
+        self.status_label.config(text=winner)
+        self.update_board()  # Update the board one last time
