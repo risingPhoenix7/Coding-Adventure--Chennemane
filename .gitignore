@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+AI/__pycache__/
+game/__pycache__/
+UI/__pycache__/
+*.py[cod] 
+*$py.class
+
+# Virtual environment
+.venv/
+
+# VSCode
+.vscode/
