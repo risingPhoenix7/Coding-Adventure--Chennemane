@@ -6,7 +6,7 @@ from AI.minimax import MinimaxAI
 def main():
     # Initialize game
     game = Chennemane()
-    ai = MinimaxAI(game)
+    ai = MinimaxAI(game, player_position=1, depth=10)
 
     # Initialize UI
     ui = GameBoard(game, ai)

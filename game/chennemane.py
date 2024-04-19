@@ -1,5 +1,7 @@
 import time
 
+move_placement_delay = 50
+
 
 class Chennemane:
     def __init__(self):
@@ -9,12 +11,26 @@ class Chennemane:
         self.turn = 0
         self.scores = [0, 0]  # Scores for Player 1 and Player 2
 
+    def copy(self):
+        new_game = Chennemane()
+        new_game.board = self.board[:]
+        new_game.turn = self.turn
+        new_game.scores = self.scores[:]
+        return new_game
+
+    def evaluate(self):
+        # Evaluation function for the minimax algorithm
+        return self.scores[0] - self.scores[1]
+
     def get_possible_moves(self):
-        # Calculates starting index based on whose turn it is (Player 1: 0-6, Player 2: 7-13)
+        # Calculates starting index based on whose turn it is (Player 0: 0-6, Player 1: 7-13)
         start_index = 7 * (self.turn)
         return [i for i in range(start_index, start_index + 7) if self.board[i] > 0]
 
     def make_move(self, move, update_board, after, on_complete):
+        if move not in self.get_possible_moves():
+            print("Invalid move")
+            return
         beads = self.board[move]
         self.board[move] = 0
         index = move
@@ -28,6 +44,7 @@ class Chennemane:
                 self.board[index] = 0
                 self.scores[self.turn] += wins
                 self.turn = 1 - self.turn  # Change turn after all beads are placed
+                self.game_over()
                 update_board()  # Final update after move is complete
                 on_complete()
                 return
@@ -47,7 +64,11 @@ class Chennemane:
                 self.board[index] = 0
 
             update_board()
-            after(100, place_bead)  # Schedule next bead placement
+            # Schedule next bead placement
+            if after is not None:
+                after(move_placement_delay, place_bead)
+            else:
+                place_bead()
 
         place_bead()  # Start placing beads
 
