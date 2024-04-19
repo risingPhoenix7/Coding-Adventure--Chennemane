@@ -4,10 +4,11 @@ import time
 
 
 class MinimaxAI:
-    def __init__(self, game: Chennemane, player_position=1, depth=3):
+    def __init__(self, game: Chennemane, player_position=1, difficulty=3):
         self.game = game
         self.player_position = player_position
-        self.depth = depth
+        self.difficulty = difficulty
+        self.depth = 10 if difficulty == 1 else difficulty-1
 
     def compute_move(self):
         print("Computing move...")
@@ -52,7 +53,9 @@ class MinimaxAI:
         # print the time to compute the move
         a = time.time()
         _, move = minimax(self.game, self.depth,
-                          float('-inf'), float('inf'), False)
+                          float(
+                              '-inf'), float('inf'), not ((self.player_position == 1) ^ (self.difficulty == 1))
+                          )
         b = time.time()
         print("Time to compute move in ms: ", (b - a) * 1000)
         return move

@@ -5,9 +5,10 @@ from AI.minimax import MinimaxAI
 import math
 import random
 
+gap_between_players=2000
 
 class GameBoard(tk.Tk):
-    def __init__(self, game, ai, board_image_path='board.png', bead_image_path='manjotti.png'):
+    def __init__(self, game: Chennemane, ai, ai0=None, board_image_path='board.png', bead_image_path='manjotti.png'):
         super().__init__()
         self.move_number = 0
         self.game = game
@@ -19,7 +20,10 @@ class GameBoard(tk.Tk):
             (self.bead_size, self.bead_size))
         self.positions = self.calculate_positions()
         self.score_labels = self.create_score_labels()
+        self.ai0 = ai0
         self.setup_GUI(board_image_path)
+        if self.ai0 is not None:
+            self.process_ai_0_move()
         # Create score labels for displaying scores
 
     def calculate_positions(self):
@@ -52,7 +56,8 @@ class GameBoard(tk.Tk):
         self.status_label = tk.Label(
             self, text="Welcome to the Game!", font=('Helvetica', 16))
         self.status_label.pack()
-        self.canvas.bind("<Button-1>", self.make_move_interactive)
+        if self.ai0 is None:
+            self.canvas.bind("<Button-1>", self.make_move_interactive)
 
     def update_board_with_delay(self):
         self.update_board()
@@ -122,10 +127,30 @@ class GameBoard(tk.Tk):
         else:
             print("Invalid move")
 
+    def process_ai_0_move(self):
+        self.status_label.config(text="Player 0's turn")
+        # Wait for 2000 milliseconds (2 seconds) before continuing
+        self.canvas.after(gap_between_players, self.execute_ai_0_move)
+
+    def execute_ai_0_move(self):
+        print(
+            f"Move #: {self.move_number} : {len(self.game.get_possible_moves())}")
+        self.move_number += 1
+        if not self.game.game_over():
+            self.canvas.delete("highlight")  # Clear previous highlights
+            move = self.ai0.compute_move()  # Compute AI's move
+            self.highlight_pit(move, "red")  # Highlight the AI's chosen pit
+            self.game.make_move(
+                move=move, update_board=self.update_board_with_delay, after=self.after, on_complete=self.process_ai_move)
+            if self.game.game_over():
+                self.end_game()
+        else:
+            self.end_game()
+
     def process_ai_move(self):
         self.status_label.config(text="Player 1's turn")
         # Wait for 2000 milliseconds (2 seconds) before continuing
-        self.canvas.after(2000, self.execute_ai_move)
+        self.canvas.after(gap_between_players, self.execute_ai_move)
 
     def execute_ai_move(self):
         print(
@@ -135,8 +160,10 @@ class GameBoard(tk.Tk):
             self.canvas.delete("highlight")  # Clear previous highlights
             move = self.ai.compute_move()  # Compute AI's move
             self.highlight_pit(move, "red")  # Highlight the AI's chosen pit
+            on_complete = (lambda: self.status_label.config(
+                text="Player 0's turn")) if (self.ai0 is None) else self.process_ai_0_move
             self.game.make_move(
-                move, self.update_board_with_delay, self.after, lambda: self.status_label.config(text="Player 0's turn"))
+                move, self.update_board_with_delay, self.after, on_complete=on_complete)
             if self.game.game_over():
                 self.end_game()
         else:
