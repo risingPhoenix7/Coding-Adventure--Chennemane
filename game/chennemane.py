@@ -46,8 +46,6 @@ class Chennemane:
                 self.turn = 1 - self.turn  # Change turn after all beads are placed
                 self.game_over()
                 update_board()  # Final update after move is complete
-                if after is not None:
-                    print("Done")
                 return on_complete()
 
             # Move to the next pit index anticlockwise

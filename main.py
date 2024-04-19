@@ -12,7 +12,7 @@ def main():
     ai = difficulty_bots.get_difficulty_bot(
         difficulty=12, game=game, player_position=1)
     ai0 = difficulty_bots.get_difficulty_bot(
-        difficulty=2, game=game, player_position=0)
+        difficulty=13, game=game, player_position=0)
 
     # Initialize UI
     ui = GameBoard(game, ai, ai0)
