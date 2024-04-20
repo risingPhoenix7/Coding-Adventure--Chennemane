@@ -2,6 +2,7 @@ from UI.display import GameBoard
 from game.chennemane import Chennemane
 from AI.minimax import MinimaxAI
 import AI.difficulty_bots as difficulty_bots
+from AI.policy_gradient import PolicyGradient
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
         difficulty=7, game=game, player_position=0)
     # if ai0 is None: its human playing.
     # Initialize UI
-    ui = GameBoard(game, None, None)
+    ui = GameBoard(game, PolicyGradient(player_position=1))
     ui.mainloop()
 
 

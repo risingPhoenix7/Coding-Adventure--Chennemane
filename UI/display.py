@@ -5,6 +5,7 @@ from AI.minimax import MinimaxAI
 import math
 import random
 from constants.constants import Constants
+import numpy as np
 
 
 class GameBoard(tk.Tk):
@@ -138,7 +139,8 @@ class GameBoard(tk.Tk):
         self.move_number += 1
         if not self.game.game_over():
             self.canvas.delete("highlight")  # Clear previous highlights
-            move = self.ai0.compute_move()  # Compute AI's move
+            move = self.ai0.compute_move(
+                np.array(self.game.board))  # Compute AI's move
             self.highlight_pit(move, "red")  # Highlight the AI's chosen pit
             self.game.make_move(
                 move=move, update_board=self.update_board_with_delay, after=self.after, on_complete=self.process_ai_move)
@@ -158,7 +160,8 @@ class GameBoard(tk.Tk):
         self.move_number += 1
         if not self.game.game_over():
             self.canvas.delete("highlight")  # Clear previous highlights
-            move = self.ai.compute_move()  # Compute AI's move
+            move = self.ai.compute_move(
+                np.array(self.game.board))  # Compute AI's move
             self.highlight_pit(move, "red")  # Highlight the AI's chosen pit
             on_complete = (lambda: self.status_label.config(
                 text="Player 0's turn")) if (self.ai0 is None) else self.process_ai_0_move

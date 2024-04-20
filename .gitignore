@@ -11,3 +11,19 @@ UI\__pycache__
 
 # VSCode
 .vscode/
+models/policy_gradient_player0_200.h5
+models/policy_gradient_player0_300.h5
+models/policy_gradient_player0_400.h5
+models/policy_gradient_player0_500.h5
+models/policy_gradient_player0_600.h5
+models/policy_gradient_player0_700.h5
+models/policy_gradient_player0_800.h5
+models/policy_gradient_player0_900.h5
+models/policy_gradient_player1_200.h5
+models/policy_gradient_player1_300.h5
+models/policy_gradient_player1_400.h5
+models/policy_gradient_player1_500.h5
+models/policy_gradient_player1_600.h5
+models/policy_gradient_player1_700.h5
+models/policy_gradient_player1_800.h5
+models/policy_gradient_player1_900.h5

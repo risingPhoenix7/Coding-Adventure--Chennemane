@@ -1,12 +1,16 @@
 import numpy as np
 import tensorflow as tf
 from keras import layers, models, optimizers
+from keras import models
+import os
 
 
 class PolicyGradient:
     def __init__(self, learning_rate=0.01, player_position=1):
         self.learning_rate = learning_rate
-        self.model = self.create_model()
+        # self.model = self.create_model()
+        self.model = self.load_model("models\policy_gradient_player1_1000.h5" if player_position == 1 else
+                                     "models\policy_gradient_player0_1000.h5")
         self.player_position = player_position
 
     def create_model(self):
@@ -28,7 +32,8 @@ class PolicyGradient:
         # Adjust the board based on the player position
         if self.player_position == 1:
             board = np.roll(board, -7)  # Shift board for Player 1
-        probs = self.model.predict(board.reshape(1, 14))[0]  # Predict move probabilities
+        probs = self.model.predict(board.reshape(1, 14))[
+            0]  # Predict move probabilities
 
         # Filter invalid moves (mask out moves leading to empty pits)
         # Only the first 7 entries are relevant due to normalization
@@ -43,7 +48,8 @@ class PolicyGradient:
                 action = np.random.choice(valid_moves)
             else:
                 # If no valid moves, this is a critical error, handle accordingly
-                raise ValueError("No valid moves available. Check game logic and state.")
+                raise ValueError(
+                    "No valid moves available. Check game logic and state.")
         else:
             # Normalize the probabilities
             filtered_probs /= filtered_probs.sum()  # Normalize the probabilities
@@ -61,4 +67,13 @@ class PolicyGradient:
         self.model.save(file_path)
 
     def load_model(self, file_path):
-        self.model = models.load_model(file_path)
+        print("Loading model from: ", file_path)
+        if not os.path.exists(file_path):
+            print(f"Error: The file {file_path} does not exist.")
+            return None
+        try:
+            model = models.load_model(file_path)
+            return model
+        except Exception as e:
+            print(f"An error occurred while loading the model: {str(e)}")
+            return None
