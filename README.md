@@ -9,7 +9,7 @@
 The game is played on a board with a 2x7 matrix of pits. Each pit starts with a predefined number of coins. Players take turns choosing a pit from their side of the board and distributing the coins in it anticlockwise. The key rules are:
 
 - **Distribution:** Begin from a selected pit and distribute its coins one-by-one into subsequent pits anticlockwise.
-- **Continuation:** If the last coin lands in an occupied pit, continue distributing from that pit. If it lands in an empty pit, the next turn begins.
+- **Continuation:** Once the coins are distributed, if the next pit is an occupied pit, continue distributing from that pit. If it's in an empty pit, collect all coins in the next-to-next pit. Then, the next turn begins.
 - **Harvesting:** If at any point a pit reaches exactly four coins (a "Bule"), those coins are harvested, i.e., removed from the board to the player's store.
 - **Winning Condition:** The game ends when all pits are empty. The player with the most coins in their store wins.
 
@@ -20,7 +20,7 @@ The game is played on a board with a 2x7 matrix of pits. Each pit starts with a 
 The codebase is structured into three main directories:
 
 - **/game:** Contains the game logic, including board setup, rules enforcement, and managing the game state.
-- **/AI:** Hosts the artificial intelligence logic. Currently, a Minimax algorithm with alpha-beta pruning is implemented, capable of achieving search depths of up to 11.
+- **/AI:** Hosts the bot logic. Currently, a Minimax algorithm with alpha-beta pruning is implemented, capable of achieving search depths of up to 11.
 - **/UI:** Manages the User Interface, allowing players to interact with the game visually and/or via command line inputs.
 
 ### AI Implementation
