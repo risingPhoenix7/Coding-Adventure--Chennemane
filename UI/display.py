@@ -4,8 +4,8 @@ from game.chennemane import Chennemane
 from AI.minimax import MinimaxAI
 import math
 import random
+from constants.constants import Constants
 
-gap_between_players=2000
 
 class GameBoard(tk.Tk):
     def __init__(self, game: Chennemane, ai, ai0=None, board_image_path='board.png', bead_image_path='manjotti.png'):
@@ -130,7 +130,8 @@ class GameBoard(tk.Tk):
     def process_ai_0_move(self):
         self.status_label.config(text="Player 0's turn")
         # Wait for 2000 milliseconds (2 seconds) before continuing
-        self.canvas.after(gap_between_players, self.execute_ai_0_move)
+        self.canvas.after(Constants.gap_between_players,
+                          self.execute_ai_0_move)
 
     def execute_ai_0_move(self):
         print(
@@ -150,7 +151,7 @@ class GameBoard(tk.Tk):
     def process_ai_move(self):
         self.status_label.config(text="Player 1's turn")
         # Wait for 2000 milliseconds (2 seconds) before continuing
-        self.canvas.after(gap_between_players, self.execute_ai_move)
+        self.canvas.after(Constants.gap_between_players, self.execute_ai_move)
 
     def execute_ai_move(self):
         print(

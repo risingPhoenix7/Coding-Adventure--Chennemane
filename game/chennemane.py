@@ -1,7 +1,5 @@
 import time
-
-move_placement_delay = 50
-
+from constants.constants import Constants
 
 class Chennemane:
     def __init__(self):
@@ -65,7 +63,7 @@ class Chennemane:
             update_board()
             # Schedule next bead placement
             if after is not None:
-                after(move_placement_delay, place_bead)
+                after(Constants.move_placement_delay, place_bead)
             else:
                 place_bead()
 
@@ -91,8 +89,8 @@ class Chennemane:
     def get_winner(self):
         # Determine the winner based on scores
         if self.scores[0] > self.scores[1]:
-            return 'Player 1 wins with score ' + str(self.scores[0])
+            return 'Player 0 wins with score ' + str(self.scores[0])
         elif self.scores[1] > self.scores[0]:
-            return 'Player 2 wins with score ' + str(self.scores[1])
+            return 'Player 1 wins with score ' + str(self.scores[1])
         else:
             return 'Draw'

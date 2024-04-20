@@ -1,5 +1,4 @@
 from game.chennemane import Chennemane
-import random
 import time
 
 
