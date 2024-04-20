@@ -1,6 +1,7 @@
 import time
 from constants.constants import Constants
 
+
 class Chennemane:
     def __init__(self):
         # Initialize game board with 6 beads in each of the 14 pits

@@ -102,9 +102,6 @@ class GameBoard(tk.Tk):
         return images
 
     def make_move_interactive(self, event):
-        if self.game.turn == 1:
-            print("Not your turn yet!")
-            return
         closest_pit, min_distance = None, float('inf')
         for i in range(self.cols):
             x, y = self.positions[i]
@@ -122,8 +119,10 @@ class GameBoard(tk.Tk):
             self.canvas.delete("highlight")  # Clear previous highlights
             # Highlight the player's chosen pit
             self.highlight_pit(closest_pit, "blue")
+            on_complete = (lambda: self.status_label.config(
+                text="Player 1's turn")) if (self.ai is None) else self.process_ai_move
             self.game.make_move(closest_pit, self.update_board_with_delay,
-                                self.after, self.process_ai_move)
+                                self.after, on_complete)
         else:
             print("Invalid move")
 

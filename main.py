@@ -15,7 +15,7 @@ def main():
         difficulty=7, game=game, player_position=0)
     # if ai0 is None: its human playing.
     # Initialize UI
-    ui = GameBoard(game, ai, ai0)
+    ui = GameBoard(game, None, None)
     ui.mainloop()
 
 

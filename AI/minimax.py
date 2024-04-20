@@ -8,8 +8,13 @@ class MinimaxAI:
         self.player_position = player_position
         self.difficulty = difficulty
         self.depth = 10 if difficulty == 1 else difficulty-1
+# board just for cross compatibility with other ai
 
-    def compute_move(self):
+    def compute_move(self, board=None):
+
+        if self.game.turn != self.player_position:
+            raise ValueError(
+                f"Not my turn!!. My position is {self.player_position} and turn is {self.game.turn}")
         print("Computing move...")
         # Minimax algorithm with alpha-beta pruning
 
